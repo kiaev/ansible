@@ -1,0 +1,43 @@
+---
+- name: install
+  hosts: all
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  tasks:
+  - name: install httpd
+    yum:
+      name: httpd
+      state: installed
+  - name: start service httpd
+    service:
+      name: httpd
+      state: started
+  - name: Creating empty file
+    file:
+      path: "/var/www/html/index.html"
+      owner: apache
+      group: apache
+      mode: '1777'
+      state: touch
+  - name: fill index.html
+    copy:
+      dest: "/var/www/html/index.html"
+      content: |
+        Welcome to my web server
+  - firewalld:
+      zone: public
+      port: 80/tcp
+      permanent: true
+      state: enabled
+    become: yes
+  - name: Restart service firewalld
+    service:
+      name: firewalld
+      state: restarted
+...
+
+   
+  

@@ -1,0 +1,29 @@
+---
+- name: uninstall httpd
+  hosts: all
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  tasks:
+    - name: remove httpd
+      yum:
+        name: httpd
+        state: absent
+    - name: Remove file (delete file)
+      ansible.builtin.file:
+        path: /var/www/html/index.html
+        state: absent
+    - firewalld:
+        zone: public
+        port: 80/tcp
+        permanent: true
+        state: disabled
+      become: yes
+    - name: Restart service firewalld
+      service:
+        name: firewalld
+        state: restarted
+...    
+  
