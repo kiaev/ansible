@@ -1,0 +1,26 @@
+---
+- name: create users
+  hosts: AnsNode1, AnsNode2
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    appusers:
+      - username: Alice
+        pass: pass1
+      - username: Bob
+        pass: pass2
+      - username: Carol
+        pass: pass3
+  tasks:
+  - name: add users
+    loop: "{{ appusers }}"
+    ansible.builtin.user:
+      name: "{{ item.username }}"
+      comment: "{{ item.username }}@example.com"
+      home: "/home/{{ item.username }}"
+      password: "{{ item.pass | password_hash('sha512') }}"
+...
+
+
