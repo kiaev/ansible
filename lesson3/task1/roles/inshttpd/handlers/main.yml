@@ -1,0 +1,6 @@
+---
+- name: httpd_start
+  service: name=httpd state=started
+
+- name: firewalld_restart
+  service: name=firewalld state=restarted

@@ -1,0 +1,50 @@
+---
+- name: install vsftpd
+  yum:
+    name: vsftpd
+    state: installed
+  notify:
+    - vsftpd_start
+- name: Creates directory
+  file:
+    path: "{{ uploadDir }}"
+    state: directory
+    owner: ftp
+    group: ftp
+    mode: '1777'
+- name: change rights dir
+  ansible.builtin.file:
+    path: "{{ anon_dir }}"
+    owner: ftp
+    group: ftp
+    mode: '1777'
+- name: set user ftp
+  ansible.builtin.user:
+    name: ftp
+    home: "{{ anon_dir }}"
+    state: present
+- firewalld:
+    zone: public
+    port: 1500-1505/tcp
+    permanent: true
+    state: enabled
+  become: yes
+- firewalld:
+    zone: public
+    port: 20-21/tcp
+    permanent: true
+    state: enabled
+  become: yes
+  notify:
+  - firewalld_restart
+- template:
+    src: "{{ pathToIndexSrc }}"
+    dest: "{{ pathToIndexDst }}"
+    owner: root
+    group: root
+    mode: '1777'
+  notify:
+  - vsftpd_restart
+- name: Set ftpd_anon_write on
+  ansible.builtin.shell: setsebool ftpd_anon_write on
+...

@@ -1,0 +1,26 @@
+---
+- name: service facts
+  service_facts:
+- debug:
+    msg: host ip address {{ ansible_facts.default_ipv4.address }}
+- name: install httpd
+  yum:
+    name: httpd
+    state: installed
+  notify:
+  - httpd_start
+- template:
+    src: "{{ pathToIndexSrc }}"
+    dest: "{{ pathToIndexDst }}"
+    owner: apache
+    group: apache
+    mode: '1777'
+- firewalld:
+    zone: public
+    port: "{{ port }}"
+    permanent: true
+    state: enabled
+  become: yes
+  notify:
+  - firewalld_restart
+...

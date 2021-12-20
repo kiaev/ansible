@@ -1,0 +1,9 @@
+---
+- name: install vsftpd
+  hosts: all
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  roles:
+    - insvsftpd

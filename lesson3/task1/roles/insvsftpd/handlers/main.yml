@@ -1,0 +1,10 @@
+---
+# handlers file for insvsftpd
+- name: vsftpd_start
+  service: name=vsftpd state=started
+
+- name: firewalld_restart
+  service: name=firewalld state=restarted
+
+- name: vsftpd_restart
+  service: name=vsftpd state=restarted

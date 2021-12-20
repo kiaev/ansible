@@ -1,0 +1,12 @@
+---
+# vars file for insvsftpd
+pathToIndexSrc: /home/ansible/lesson3/task1/roles/insvsftpd/templates/main.yml
+pathToIndexDst: /etc/vsftpd/vsftpd.conf
+uploadDir: /var/ftp/pub/upload
+anonymous_enable: YES
+listen_IP4: YES
+listen_ipv6: NO
+min_port: 15500
+max_port: 15000
+anon_dir: /var/ftp/pub
+...

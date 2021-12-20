@@ -1,0 +1,5 @@
+---
+# vars file for inshttpd
+port: 80/tcp
+pathToIndexSrc: /home/ansible/lesson3/task1/roles/inshttpd/templates/main.yml
+pathToIndexDst: /var/www/html/index.html
